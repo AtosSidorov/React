@@ -1,7 +1,6 @@
 import React, { useState } from 'react'; 
 
 function AuthForm() {
-  
   const [email, setEmail] = useState(''); 
   const [password, setPassword] = useState(''); 
   const [error, setError] = useState(''); 
@@ -10,45 +9,48 @@ function AuthForm() {
   const handleSubmit = async (event) => {
     event.preventDefault(); 
 
-    // поля заполнены корректно
+    // Проверка заполнения полей
     if (!email || !password) {
       setError('Пожалуйста, заполните все поля.');
+      setSuccessMessage(''); // Очищаем сообщение об успешной авторизации
       return;
     }
-    // проверка  email
+
+    // Проверка email
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailPattern.test(email)) {
       setError('Неверный формат электронной почты.');
+      setSuccessMessage(''); // Очищаем сообщение об успешной авторизации
       return;
     }
     
-    // сброс состояний
+    // Сброс состояний перед отправкой
     setError('');
     setSuccessMessage('');
 
     try {
-      // имитация запроса на сервер
+      // Имитация запроса на сервер
       const response = await new Promise((resolve) => {
         setTimeout(() => {
           resolve({
-            ok: true, // успешный ответ
+            ok: true, // Симулируем успешный ответ
             json: () => Promise.resolve({ message: 'Авторизация успешна!' }),
           });
-        }, 1000); //  задержка 
+        }, 1000); // Симулируем задержку 1 секунда
       });
 
       if (response.ok) {
-        // сообщение об успешной авторизации
+        // Сообщение об успешной авторизации
         setSuccessMessage('Авторизация прошла успешно!');
         setEmail('');
         setPassword('');
       } else {
-        // сообщение об ошибке
+        // Сообщение об ошибке
         const errorData = await response.json();
         setError(errorData.message || 'Ошибка авторизации');
       }
     } catch (error) {
-        setError('Произошла ошибка. Повторите попытку позже.');
+      setError('Произошла ошибка. Повторите попытку позже.');
     }
   };
 
@@ -91,4 +93,4 @@ function AuthForm() {
   );
 }
 
-export default AuthForm; 
+export default AuthForm;
